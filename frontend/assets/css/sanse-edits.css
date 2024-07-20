@@ -1,0 +1,11 @@
+.rowpad{
+   margin-top: 20px; 
+   box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2); /* Sombreado */
+   padding: 10px;
+}
+.logo{
+    color: white !important;
+}
+.textp{
+    display: block;
+}
