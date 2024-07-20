@@ -2,7 +2,7 @@ const { logErrors, errorHandler,boomErrorhandler } = require('./middleware/error
 const express = require('express');
 const routerApi = require('./routes/index');
 const cors = require('cors');
-const whitelist = ["http://localhost:3000", "https://myapp.com"];
+const whitelist = ["http://localhost:3000", "https://myapp.com","http://127.0.0.1:5500"];
 const options = {
     origin: (origin, callback)=>{
         if(whitelist.includes(origin) || !origin){
