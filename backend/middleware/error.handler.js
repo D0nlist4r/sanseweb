@@ -19,4 +19,4 @@ function boomErrorhandler(err,req,res,next){
     next(err)
 }
 
-module.exports = {logErrors, errorHandler, boomErrorhandler} //exportarlo como modulo
+export { logErrors, errorHandler, boomErrorhandler }; //exportar las funciones para poder ser utilizadas en otros archivos

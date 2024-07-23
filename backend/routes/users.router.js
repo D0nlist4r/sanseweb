@@ -1,75 +1,37 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const validatorHandler = require('../middleware/validator.handler');
-let userService = require('../services/users.services');
-let user = new userService();
-const { createUserSchema, updateUserSchema, getUserSchema } = require('../schemas/users.schema');
-const e = require('express');
+import validatorHandler from '../middleware/validator.handler.js';
+import authHandler from '../middleware/auth.handler.js';
+import { getInfoUser, createUser, updateUser, deleteUser } from '../controllers/userControllers.js';
+import { createUserSchema, updateUserSchema, getUserSchema } from '../schemas/users.schema.js';
 
-// middleware específico a este router
-router.use('/', function (error, req, res, next) {
-    if (error) {
-        res.status(500).json({ error });
-    } else {
-        console.log('Hola, soy el middleware')
-        next() // se utiliza para que se ejecute el router.get
-    }
-})
+router.get(
+    '/get-info/:idUser',
+    authHandler,
+    validatorHandler(getUserSchema, 'params'),
+    getInfoUser
+)
 
-router.get('/get-info/:idUser', validatorHandler(getUserSchema, 'params'), async (req, res, next) => {
-    try {
-        // query de sumar 2 numeros y e imprimir el resultado en consola
-        /*
-        res.status(404).json({
-            message: 'not found'
-        })
-        */
-        const { idUser } = req.params;
-        res.status(200).json({
-            idUser
-        })
-    } catch (error) {
-        next(error); //se agrega el next para atrapar de forma explicita el error con el middleware
-    }
-})
+router.post(
+    '/create',
+    validatorHandler(createUserSchema, 'body'),
+    createUser
+)
 
-router.post('/create', validatorHandler(createUserSchema, 'body'), async (req, res, next) => {
-    try {
-        const body = req.body;
-        const response = await user.create(body.nombres, body.contraseña, body.usuario, body.email, body.telefono, body.fecha_creacion);
-        res.json(response);
-    } catch (error) {
-        next(error);
-    }
-})
-
-router.patch('update/:id', validatorHandler(getUserSchema, 'params'), validatorHandler(updateUserSchema, 'body'), async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const body = req.body;
-        res.json({
-            message: 'updating partial',
-            data: body,
-            id,
-        })
-    } catch (error) {
-        next(error); //se agrega el next para atrapar de forma explicita el error con el middleware
-    }
-})
+router.patch(
+    '/update/:idUser',
+    authHandler,
+    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(updateUserSchema, 'body'),
+    updateUser
+)
 
 
-router.delete('/delete/:id', validatorHandler(getUserSchema, 'params'), async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        res.json({
-            message: 'deleting',
-            id,
-        })
-    } catch (error) {
-        next(error); //se agrega el next para atrapar de forma explicita el error con el middleware
-    }
-})
+router.delete(
+    '/delete/:idUser',
+    authHandler,
+    validatorHandler(getUserSchema, 'params'),
+    deleteUser
+);
 
-
-
-module.exports = router;
+export default router;

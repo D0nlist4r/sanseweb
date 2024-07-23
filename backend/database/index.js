@@ -1,10 +1,7 @@
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "MYSQL-root-1-$",
-    database: "sense_finance_db"
-})
+import mysql from 'mysql';
+import {config} from '../config/config.js';
+const connection = mysql.createConnection(config);
+
 connection.connect(function (err) {
     if (err) {
         console.log("Error in the connection")
@@ -22,4 +19,4 @@ connection.connect(function (err) {
     }
 })
 
-module.exports = connection;
+export default connection;

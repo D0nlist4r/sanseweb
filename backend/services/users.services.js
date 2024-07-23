@@ -1,14 +1,14 @@
-const boom = require('@hapi/boom');
-let connection = require('../database/index');
+import boom from '@hapi/boom';
+import connection from '../database/index.js';
 
 class UserService {
     constructor() {
     }
 
-    create(nombres, contraseña, usuario, email, telefono, fecha_creacion) {
+    create(nombres, contrasena, usuario, email, telefono, fecha_creacion) {
         return new Promise((resolve, reject) => {
-            const query = `INSERT INTO seguridad_usuarios (nombres, contraseña, usuario, email, telefono, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?)`;
-            const values = [nombres, contraseña, usuario, email, telefono, fecha_creacion];
+            const query = `INSERT INTO seguridad_usuarios (nombres, contrasena, usuario, email, telefono, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?)`;
+            const values = [nombres, contrasena, usuario, email, telefono, fecha_creacion];
             connection.query(query, values, (err, result) => {
                 if (err) {
                     reject(boom.badRequest('Error en la creación del usuario', err));
@@ -23,17 +23,67 @@ class UserService {
         });
     }
 
-    find() {
-        return this.products;
+    getInfo(idUser) {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT * FROM seguridad_usuarios WHERE id_usuario = ?`;
+            const values = [idUser];
+            connection.query(query, values, (err, result) => {
+                if (err) {
+                    reject(boom.badRequest('Error en la obtención del usuario', err));
+                } else {
+                    if (result.length === 0) {
+                        resolve({
+                            status: false,
+                            message: 'Usuario no encontrado'
+                        });
+                    } else {
+                        resolve({
+                            status: true,
+                            message: 'Usuario encontrado',
+                            data: result
+                        });
+                    }
+                }
+            });
+        });
     }
 
-    findOne(id) {
-        return this.products.find(item => item.id === id)
+    update(id_usuario, nombres, contrasena, usuario, email, telefono, fecha_actualizacion) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE seguridad_usuarios SET nombres = ?, contrasena = ?, usuario = ?, email = ?, telefono = ?, fecha_actualizacion = ? WHERE id_usuario = ?`;
+            const values = [nombres, contrasena, usuario, email, telefono, fecha_actualizacion, id_usuario];
+            connection.query(query, values, (err, result) => {
+                if (err) {
+                    reject(boom.badRequest('Error en la actualización del usuario', err));
+                } else {
+                    resolve({
+                        status: true,
+                        message: 'Usuario actualizado correctamente',
+                        data: result
+                    });
+                }
+            });
+        });
     }
 
-    update() { }
 
-    delete() { }
+    deleteUser(id_usuario) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE seguridad_usuarios SET visible = 0 WHERE id_usuario = ?`;
+            const values = [id_usuario];
+            connection.query(query, values, (err, result) => {
+                if (err) {
+                    reject(boom.badRequest('Error al eliminar el usuario', err));
+                } else {
+                    resolve({
+                        status: true,
+                        message: 'Usuario eliminado correctamente',
+                        data: result
+                    });
+                }
+            });
+        });
+    }
 }
 
-module.exports = UserService;
+export default UserService;
