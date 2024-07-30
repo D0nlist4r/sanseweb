@@ -3,6 +3,7 @@ import './App.css'
 import Home from '../Home'
 import Login from '../Login'
 import NotFound from '../NotFound'
+import Register from '../Register'
 
 const AppRoute =() => {
 
@@ -10,6 +11,7 @@ const AppRoute =() => {
     { path: '/', element: <Home /> },
     { path: '/Login', element: <Login /> },
     { path: '/*', element: <NotFound /> },
+    { path: '/Register', element: <Register /> },
   ]);
   return route
 }
