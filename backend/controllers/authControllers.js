@@ -88,4 +88,9 @@ const login = async (req, res, next) => {
     }
 };
 
-export { register, login };
+const logout = (req, res, next) => {
+    res.clearCookie('jwt');
+    res.status(200).json({ status: true, message: 'Sesión cerrada' });
+};
+
+export { register, login,logout };

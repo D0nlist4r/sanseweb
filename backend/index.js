@@ -1,5 +1,5 @@
 import express from 'express';
-import dotenv  from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -17,7 +17,8 @@ const options = {
         } else {
             callback(new Error('no permitido'));
         }
-    }
+    },
+    credentials: true // Habilita el uso de credenciales
 };
 
 app.use(cookieParser())
@@ -27,16 +28,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 routerApi(app);
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', whitelist);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 app.use(logErrors);
 app.use(errorHandler);
 app.use(boomErrorhandler);
-
-/* app.get('/', function(request, response) {
-	// Render login template
-	const loginPath = path.join(__dirname, '../frontend/src/login.html');
-    // Enviar el archivo login.html como respuesta
-    response.sendFile(loginPath);
-}); */
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);

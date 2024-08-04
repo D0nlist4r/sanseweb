@@ -1,13 +1,15 @@
-function Home() {
+import verifyToken from "../../controllers/Auth"
+import mainNav from "../../components/nav/nav"
 
-    return (
-      <>
-        <div className='bg-red-100'>
-        <h2>Home</h2>
-        </div>
-      </>
-    )
-  }
-  
-  export default Home
-  
+function Home() {
+  verifyToken();
+  return (
+    <>
+      {mainNav()}
+      <div>
+      </div>
+    </>
+  )
+}
+
+export default Home
