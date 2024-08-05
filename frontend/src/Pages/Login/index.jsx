@@ -38,48 +38,40 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-80"
-      >
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700" htmlFor="email">
-            Correo Electrónico
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-            placeholder="tuemail@ejemplo.com"
-          />
+    <div className="hero bg-base-200 min-h-screen">
+      <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="text-center lg:text-left">
+          <h1 className="text-5xl font-bold">Login now!</h1>
+          <p className="py-6">
+            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+            quasi. In deleniti eaque aut repudiandae et a id nisi.
+          </p>
         </div>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-            placeholder="********"
-          />
+        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <form className="card-body" onSubmit={handleSubmit}>
+            <div className="form-control">
+              <label className="label" htmlFor="email">
+                <span className="label-text">Email</span>
+              </label>
+              <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input input-bordered" required placeholder='email@gmail.com' />
+            </div>
+            <div className="form-control">
+              <label className="label" htmlFor='password' >
+                <span className="label-text">Password</span>
+              </label>
+              <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="********" className="input input-bordered" />
+              <label className="label">
+                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+              </label>
+            </div>
+            <div className="form-control mt-6">
+              <button type="submit" className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200" >
+                Iniciar Sesión
+              </button>
+            </div>
+          </form>
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          Iniciar Sesión
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

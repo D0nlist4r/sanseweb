@@ -3,7 +3,7 @@ import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function mainNav() {
+export default function MainNav() {
     const navigate = useNavigate();
     function logout() {
         let baseURL = 'http://localhost:3001/api/v1/auth/logout';
@@ -25,7 +25,7 @@ export default function mainNav() {
 
     return (
         <>
-            <div className="navbar bg-base-100 text-lg">
+            <div className="navbar bg-base-200 text-lg">
                 <div className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle ">

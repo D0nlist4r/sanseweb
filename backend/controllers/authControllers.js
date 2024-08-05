@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { checkRecordExists, insertRecord } from '../database/sqlFunctions.js';
 
-const generateAccessToken = (userId) => {
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIEMPO_EXPIRA });
+const generateAccessToken = (userId,userName) => {
+    return jwt.sign({ userId,userName }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIEMPO_EXPIRA });
 };
 
 const register = async (req, res, next) => {
@@ -62,10 +62,12 @@ const login = async (req, res, next) => {
             );
 
             if (passwordMatch) {
-                let tmpToken = generateAccessToken(existingUser.id_usuario);
+                let tmpToken = generateAccessToken(existingUser.id_usuario,existingUser.usuario);
                 const cookiesOptions = {
-                    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
-                    httpOnly: true
+                    httpOnly: true, // La cookie solo se puede acceder desde el servidor
+                    secure: process.env.NODE_ENV === 'production' ? true : false, // La cookie solo se puede acceder a través de HTTPS
+                    sameSite: 'strict', // La cookie no se enviará en solicitudes de origen cruzado
+                    maxAge: process.env.JWT_COOKIE_EXPIRES * 1000 * 60 * 60, // La cookie tiene un tiempo de validez de 1 h
                 }
                 res.cookie('jwt', tmpToken, cookiesOptions)
                 res.status(200).json({
@@ -74,7 +76,7 @@ const login = async (req, res, next) => {
                     data: {
                         userId: existingUser.userId,
                         email: existingUser.email,
-                        access_token: tmpToken
+                        nombre: existingUser.usuario,
                     },
                 });
             } else {

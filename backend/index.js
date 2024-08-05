@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import routerApi from './routes/index.js';
+import session from 'express-session';
 import { logErrors, errorHandler, boomErrorhandler } from './middleware/error.handler.js';
 
 const port = process.env.PORT;
@@ -26,6 +27,12 @@ app.use(cors(options));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(session({
+    secret: process.env.JWT_SECRET, // Cambia esto por una clave secreta real
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: process.env.ENV === 'production' ? true : false } // Asegúrate de usar `secure: true` si estás usando HTTPS
+}));
 
 routerApi(app);
 app.use(function (req, res, next) {

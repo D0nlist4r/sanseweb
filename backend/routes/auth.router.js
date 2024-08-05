@@ -10,7 +10,7 @@ router.post("/login", validatorHandler(loginUserSchema, 'body'), login);
 // ruta para cerrar la sesion
 router.get("/logout", logout);
 router.post("/verify", authenticateToken, (req, res) => {
-    res.status(200).json({ status:true, message: 'Token verificado' });
+    res.status(200).json({ status:true, message: 'Token verificado', user: req.session.user });
 });
 
 export default router;
