@@ -25,7 +25,7 @@ function Home() {
   if (response.status === true) {
     return (
       <>
-        <MainNav />
+        <MainNav userId={response.user.userId} />
         <ContentDashboard name={response.user.userName} />
         <Footer />
       </>

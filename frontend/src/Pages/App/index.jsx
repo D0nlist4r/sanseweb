@@ -4,12 +4,14 @@ import Home from '../Home'
 import Login from '../Login'
 import NotFound from '../NotFound'
 import Register from '../Register'
+import Usuarios from '../Usuarios'
 
 const AppRoute =() => {
 
   let route = useRoutes([
     { path: '/', element: <Home /> },
     { path: '/Login', element: <Login /> },
+    { path: '/gestion-usuarios', element: <Usuarios /> },
     { path: '/*', element: <NotFound /> },
     { path: '/Register', element: <Register /> },
   ]);

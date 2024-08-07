@@ -56,4 +56,19 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
-export { getInfoUser, createUser, updateUser, deleteUser };
+// obtener listado usuarios
+const getUsers = async (req, res, next) => {
+    try {
+        let response = await user.getUsers();
+        console.log(response);
+        if (response.status) {
+            res.status(200).json(response);
+        } else {
+            res.status(404).json(response);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { getInfoUser, createUser, updateUser, deleteUser, getUsers };

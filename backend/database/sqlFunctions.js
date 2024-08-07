@@ -42,4 +42,18 @@ const insertRecord = (tableName, record) => {
     });
 };
 
-export { createTable, checkRecordExists, insertRecord };
+const updateRecord = (tableName, record, id) => {
+    return new Promise((resolve, reject) => {
+        const query = `UPDATE ${tableName} SET ? WHERE id_usuario = ?`;
+
+        pool.query(query, [record, id], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+export { createTable, checkRecordExists, insertRecord, updateRecord };

@@ -1,12 +1,17 @@
 import React from 'react';
-import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine } from "@remixicon/react";
+import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine, RiGroupFill } from "@remixicon/react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function MainNav() {
+export default function MainNav(props) {
     const navigate = useNavigate();
+
+    function handleNavigation(route) {
+        navigate(route);
+    }
     function logout() {
-        let baseURL = 'http://localhost:3001/api/v1/auth/logout';
+        let id = props.userId;
+        let baseURL = 'http://localhost:3001/api/v1/auth/logout/' + id;
         axios.defaults.withCredentials = true;
         axios.get(baseURL)
             .then((response) => {
@@ -33,11 +38,13 @@ export default function MainNav() {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu dropdown-content shadow bg-base-100 rounded-box z-[1] mt-3 w-56">
+                            className="menu dropdown-content shadow bg-base-100 rounded-box z-[1] mt-3 w-18">
                             <li >
-                                <a className="flex gap-6 tooltip tooltip-right px-4 text-lg" data-tip="Home">
+                                <a  onClick={() => handleNavigation("/")} className="flex gap-6 tooltip tooltip-right px-4 text-lg" data-tip="Home">
                                     <RiHome2Fill />
-                                    Home
+                                </a>
+                                <a onClick={() => handleNavigation("/gestion-usuarios")} className="flex gap-6 tooltip tooltip-right px-4 text-lg BtnLinkNav" data-tip="Gestion de usuarios">
+                                    <RiGroupFill />
                                 </a>
                             </li>
                         </ul>
