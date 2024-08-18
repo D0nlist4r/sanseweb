@@ -26,7 +26,7 @@ const Login = () => {
       .then((response) => {
         console.log(response);
         if (response.data.status === true) {
-          navigate("/");
+          navigate("/Home");
         }
       })
       .catch(error => {
