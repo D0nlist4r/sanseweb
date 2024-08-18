@@ -29,9 +29,11 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     try {
-        const { idUser } = req.params;
+        // se recibe el id_usuario por medio del body
         const body = req.body;
-        let response = await user.update(idUser, body.nombres, body.contrasena, body.usuario, body.email, body.telefono, body.fecha_actualizacion);
+        const idUser = req.body.idUser;
+        console.log(idUser);
+        let response = await user.update(idUser, body.nombres, body.usuario, body.email, body.telefono, body.fecha_actualizacion);
         if (response.status) {
             res.status(200).json(response);
         } else {

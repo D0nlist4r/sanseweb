@@ -15,8 +15,11 @@ const loginUserSchema = Joi.object({
 })
 
 const updateUserSchema = Joi.object({
+    idUser: Joi.string().guid({
+        version: ['uuidv4']
+    }).required(),
     nombres: Joi.string().min(3).max(50).required(),
-    contrasena: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+    // contrasena: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
     usuario: Joi.string().min(3).max(50).required(),
     email: Joi.string().email().required(),
     telefono: Joi.string().pattern(new RegExp("^[0-9]{10}$")).required(),

@@ -29,9 +29,8 @@ router.post(
 );
 
 router.patch(
-    '/update/:idUser',
+    '/update',
     authHandler,
-    validatorHandler(getUserSchema, 'params'),
     validatorHandler(updateUserSchema, 'body'),
     updateUser
 );

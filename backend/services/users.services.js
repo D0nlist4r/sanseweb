@@ -25,7 +25,7 @@ class UserService {
 
     getInfo(idUser) {
         return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM seguridad_usuarios WHERE id_usuario = ?`;
+            const query = `SELECT id_usuario,nombres,usuario,email,telefono FROM seguridad_usuarios WHERE id_usuario = ?`;
             const values = [idUser];
             connection.query(query, values, (err, result) => {
                 if (err) {
@@ -48,14 +48,16 @@ class UserService {
         });
     }
 
-    update(id_usuario, nombres, contrasena, usuario, email, telefono, fecha_actualizacion) {
+    update(id_usuario, nombres, usuario, email, telefono, fecha_actualizacion) {
         return new Promise((resolve, reject) => {
-            const query = `UPDATE seguridad_usuarios SET nombres = ?, contrasena = ?, usuario = ?, email = ?, telefono = ?, fecha_actualizacion = ? WHERE id_usuario = ?`;
-            const values = [nombres, contrasena, usuario, email, telefono, fecha_actualizacion, id_usuario];
+            const query = `UPDATE seguridad_usuarios SET nombres = ?, usuario = ?, email = ?, telefono = ?, fecha_actualizacion = ? WHERE id_usuario = ?`;
+            const values = [nombres, usuario, email, telefono, fecha_actualizacion, id_usuario];
             connection.query(query, values, (err, result) => {
                 if (err) {
                     reject(boom.badRequest('Error en la actualización del usuario', err));
                 } else {
+                    console.log(id_usuario);
+                    console.log(result);
                     resolve({
                         status: true,
                         message: 'Usuario actualizado correctamente',

@@ -22,7 +22,6 @@ export default function Usuarios() {
     if (response.status === true) {
         return (
             <>
-                <MainNav />
                 <GridUsuarios />
                 <Footer />
             </>
