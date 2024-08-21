@@ -6,7 +6,7 @@ import NotFound from '../NotFound'
 import Register from '../Register'
 import Usuarios from '../Usuarios'
 import Index from '../index'
-import MainNav from '../../components/nav/nav'
+import { NavPage } from '../../components/nav/NavPage'
 
 const AppRoute =() => {
 
@@ -26,6 +26,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+      <NavPage/>
       <AppRoute/>
       </BrowserRouter>
     </>
