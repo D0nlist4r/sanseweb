@@ -31,7 +31,8 @@ export default function MainNav(props) {
     return (
         <>
             <div className="navbar bg-base-200 text-lg">
-                <div className="navbar-start">
+                {/* logo navegador mobile */}
+                <div style={{display:'none'}} className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle ">
                             <RiMenu2Fill />
@@ -50,10 +51,14 @@ export default function MainNav(props) {
                         </ul>
                     </div>
                 </div>
-                <div className="flex-1 navbar-center" >
-                    <a className="btn btn-ghost text-xl">Sanse Finance</a>
+                {/* Nav central para desktop */}
+                <div className="flex-1 navbar-left" >
+                    <a className="btn btn-ghost text-md">Introduccion</a>
+                    <a className="btn btn-ghost text-md">Productos</a>
+                    <a className="btn btn-ghost text-md">Runmap</a>
+                    <a className="btn btn-ghost text-md">Contacto</a>
                 </div>
-                <div className="flex-none navbar-end">
+                <div style={{display:'none'}} className="flex-none navbar-end">
                     <button className="btn btn-ghost btn-circle">
                         <div className="indicator">
                             <RiNotification3Fill />
