@@ -7,6 +7,7 @@ import Register from '../Register'
 import Usuarios from '../Usuarios'
 import Index from '../index'
 import { NavPage } from '../../components/nav/NavPage'
+import Footer from '../../components/footer/footer'
 
 const AppRoute =() => {
 
@@ -28,6 +29,7 @@ function App() {
       <BrowserRouter>
       <NavPage/>
       <AppRoute/>
+      <Footer/>
       </BrowserRouter>
     </>
   )

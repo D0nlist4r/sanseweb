@@ -4,6 +4,7 @@ import { RiTwitterFill, RiRobot3Fill } from '@remixicon/react';
 export default function Footer() {
     return (
         <>
+        <div className='mt-10'>
             <footer className="footer bg-base-200 text-base-content p-10">
                 <nav>
                     <h6 className="footer-title">Services</h6>
@@ -58,6 +59,7 @@ export default function Footer() {
                     </div>
                 </nav>
             </footer>
+        </div>
         </>
     )
 }
