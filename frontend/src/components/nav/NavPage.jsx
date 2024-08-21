@@ -10,7 +10,7 @@ export function NavPage() {
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">
-                <a className="btn btn-ghost text-xl">
+                <a onClick={()=> navigate("/")} className="btn btn-ghost text-xl">
                     <RiMoneyDollarCircleLine/>
                     SanseFinance
                 </a>

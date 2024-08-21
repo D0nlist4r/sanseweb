@@ -1,6 +1,9 @@
 import React from 'react';
-import { NavPage } from '../../components/nav/NavPage';
+import { useNavigate } from 'react-router-dom';
+
+
 function Index() {
+    const navigate = useNavigate();
     return ( 
     <>
         <main>
@@ -9,7 +12,7 @@ function Index() {
                 <h1 className='pt-28 SSfont-mono flex justify-center text-6xl text-white'>Sanse Finance</h1>
                 <h1 className='SSfont-mono flex justify-center text-3xl text-stone-300'> Fondo de inversion en cripto - Prestamos y productos P2P</h1>
                 <div className='flex justify-center pt-10 gap-6'>
-                <button className="btn btn-outline mb-5">Entrar APP</button>
+                <button onClick={()=> navigate("/Login")} className="btn btn-outline mb-5">Entrar APP</button>
                 <button className="btn btn-outline btn-secondary mb-5">Leer mas</button>
                 </div>    
             </div>
