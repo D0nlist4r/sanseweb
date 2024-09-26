@@ -24,7 +24,6 @@ export default function Usuarios() {
             <>
                 <MainNav userId={response.user.userId} />
                 <GridUsuarios />
-                <Footer />
             </>
         );
     } else {

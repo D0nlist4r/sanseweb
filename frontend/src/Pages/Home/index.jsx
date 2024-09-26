@@ -27,7 +27,6 @@ function Home() {
       <>
         <MainNav userId={response.user.userId} />
         <ContentDashboard name={response.user.userName} />
-        <Footer />
       </>
     );
   } else {
