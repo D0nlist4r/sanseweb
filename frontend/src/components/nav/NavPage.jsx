@@ -1,12 +1,26 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { RiLoginBoxLine, RiBallPenLine, RiMoneyDollarCircleLine } from '@remixicon/react';
 import { useNavigate } from 'react-router-dom';
 
-export function NavPage() {
+
+export function NavPage(props) {
     const navigate = useNavigate();
-    function handleNavigation(route) {
+    const [Habilitado, setHabilitado]  = useState(false);
+
+    function handleNavigation (route) {
         navigate(route);
     }
+    function login_On () {
+        if (Habilitado){
+            return <a onClick={()=> navigate("/Login")} className="btn btn-outline btn-secondary mx-2">
+                    <RiLoginBoxLine/>
+                    Ingresar
+                </a>
+        }
+        else 
+        return <div></div>
+    }
+    
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">
@@ -16,10 +30,7 @@ export function NavPage() {
                 </a>
             </div>
             <div className="navbar-end">
-                <a onClick={()=> navigate("/Login")} className="btn btn-outline btn-secondary mx-2">
-                    <RiLoginBoxLine/>
-                    Ingresar
-                </a>
+                {login_On(props.estado)} 
                 <a onClick={()=> navigate("/Register")} className="btn btn-outline btn-default">
                     <RiBallPenLine/>
                     Retistrarse

@@ -1,9 +1,11 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NavPage } from '../../components/nav/NavPage';
 
 
 function Index() {
     const navigate = useNavigate();
+
     return ( 
     <>
         <main>
