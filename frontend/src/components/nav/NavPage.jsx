@@ -7,7 +7,26 @@ export function NavPage() {
     const navigate = useNavigate();
     const [Habilitado, setHabilitado]  = useState(false);
     const Location = useLocation();
-    function loginon(){
+      function homeOn(){
+        if (Location.pathname == '/Home'){
+            return <div></div>
+        }
+        else{ 
+         return  <div className="navbar bg-base-100">
+         <div className="navbar-start">
+             <a onClick={()=> navigate("/")} className="btn btn-ghost text-xl">
+                 <RiMoneyDollarCircleLine/>
+                 SanseFinance
+             </a>
+         </div>
+         <div className="navbar-end">
+         {loginOn()}
+         {registerOn()}
+         </div>
+     </div>
+        }
+    }
+    function loginOn(){
         if (Location.pathname == '/Login'){
             return <div></div>
         }
@@ -15,25 +34,23 @@ export function NavPage() {
          return  <a onClick={()=> navigate("/Login")} className="btn btn-outline btn-secondary mx-2">
         <RiLoginBoxLine/>
         Ingresar
-    </a>
-}
+        </a>
+        }
     }
-
-    return (
-        <div className="navbar bg-base-100">
-            <div className="navbar-start">
-                <a onClick={()=> navigate("/")} className="btn btn-ghost text-xl">
-                    <RiMoneyDollarCircleLine/>
-                    SanseFinance
-                </a>
-            </div>
-            <div className="navbar-end">
-            {loginon()}
-                <a onClick={()=> navigate("/Register")} className="btn btn-outline btn-default">
-                    <RiBallPenLine/>
-                    Retistrarse
-                </a>
-            </div>
-        </div>
+    function registerOn(){
+        if (Location.pathname == '/Register'){
+            return <div></div>
+        }
+        else{ 
+         return  <a onClick={()=> navigate("/Register")} className="btn btn-outline btn-default">
+         <RiBallPenLine/>
+         Retistrarse
+     </a>
+        }
+    }
+  
+    return (<>
+        {homeOn()}
+        </>
     );
 }

@@ -40,7 +40,7 @@ export default function MainNav(props) {
                             tabIndex={0}
                             className="menu dropdown-content shadow bg-base-100 rounded-box z-[1] mt-3 w-18">
                             <li >
-                                <a  onClick={() => handleNavigation("/")} className="flex gap-6 tooltip tooltip-right px-4 text-lg" data-tip="Home">
+                                <a  onClick={() => handleNavigation("/Home")} className="flex gap-6 tooltip tooltip-right px-4 text-lg" data-tip="Home">
                                     <RiHome2Fill />
                                 </a>
                                 <a onClick={() => handleNavigation("/gestion-usuarios")} className="flex gap-6 tooltip tooltip-right px-4 text-lg BtnLinkNav" data-tip="Gestion de usuarios">

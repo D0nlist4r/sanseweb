@@ -1,4 +1,4 @@
-import {useRoutes,BrowserRouter} from 'react-router-dom'
+import {useRoutes,BrowserRouter} from 'react-router-dom';
 import './App.css'
 import Home from '../Home'
 import Login from '../Login'
@@ -10,7 +10,6 @@ import { NavPage } from '../../components/nav/NavPage'
 import Footer from '../../components/footer/footer'
 
 const AppRoute =() => {
-
   let route = useRoutes([
     { path: '/', element: <Index/>},
     { path: '/Home', element: <Home /> },
@@ -23,7 +22,6 @@ const AppRoute =() => {
 }
 
 function App() {
-
   return (
     <>
       <BrowserRouter>

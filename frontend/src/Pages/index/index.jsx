@@ -9,7 +9,7 @@ function Index() {
     return ( 
     <>
         <main>
-            <div className='container'>
+            <div className='container mx-auto'>
             <div id='Primer-tramo ' className='size-full bg-gradient-to-r from-violet-500 to-fuchsia-500'>
                 <h1 className='pt-28 SSfont-mono flex justify-center text-6xl text-white'>Sanse Finance</h1>
                 <h1 className='SSfont-mono flex justify-center text-3xl text-stone-300'> Fondo de inversion en cripto - Prestamos y productos P2P</h1>
