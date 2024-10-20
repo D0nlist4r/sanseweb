@@ -11,7 +11,9 @@ export default function ContentDashboard(props) {
                         Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
                         quasi. In deleniti eaque aut repudiandae et a id nisi.
                     </p>
-                    <button className="btn btn-primary">Get Started</button>
+                    <button className="btn btn-primary mx-2 my-2">EMPEZAR AHORRO</button>
+                    <button className="btn btn-secondary mx-2 my-2">SOLICITAR PRESTAMO</button>
+                    <button className="btn btn-success mx-2 my-2">SERVICIO P2P</button>
                 </div>
             </div>
         </div>
