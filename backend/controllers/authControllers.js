@@ -99,4 +99,29 @@ const logout = (req, res, next) => {
     res.status(200).json({ status: true, message: 'Sesión cerrada' });
 };
 
-export { register, login,logout };
+const updatePassword = async (req, res, next) => {
+    const { idUser, contrasena, contrasenaNueva } = req.body;
+    try {
+        const existingUser = await checkRecordExists("seguridad_usuarios", "id_usuario", idUser);
+        if (existingUser) {
+            const passwordMatch = await bcrypt.compare(
+                contrasena,
+                existingUser.contrasena
+            );
+            if (passwordMatch) {
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(contrasenaNueva, salt);
+                updateRecord("seguridad_usuarios", { contrasena: hashedPassword }, idUser);
+                res.status(200).json({ status: true, message: 'Contraseña actualizada correctamente' });
+            } else {
+                res.status(401).json({ status: false, error: 'Contraseña incorrecta' });
+            }
+        } else {
+            res.status(404).json({ status: false, error: 'Usuario no encontrado' });
+        }
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { register, login,logout,updatePassword };

@@ -31,5 +31,12 @@ const getUserSchema = Joi.object({
         version: ['uuidv4']
     }).required(),
 })
+const updatePasswordSchema = Joi.object({
+    idUser: Joi.string().guid({
+        version: ['uuidv4']
+    }).required(),
+    contrasena: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+    contrasenaNueva: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+})
 
-export { createUserSchema, updateUserSchema, getUserSchema, loginUserSchema };
+export { createUserSchema, updateUserSchema, getUserSchema, loginUserSchema,updatePasswordSchema };

@@ -4,7 +4,7 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import axios from 'axios';
 import Unauthorized from "../unauthorized/index.jsx";
 import React, { useState, useEffect, useRef } from "react";
-import { RiLockPasswordFill,RiUserFill,RiUserAddFill,RiDeleteBin5Fill, RiGroupFill, RiIdCardLine, RiEditBoxFill, RiAtLine, RiMailFill, RiPencilFill, RiCircleLine, RiPhoneFill } from '@remixicon/react';
+import { RiLockPasswordFill, RiUserFill, RiUserAddFill, RiDeleteBin5Fill, RiGroupFill, RiIdCardLine, RiEditBoxFill, RiAtLine, RiMailFill, RiPencilFill, RiCircleLine, RiPhoneFill } from '@remixicon/react';
 import { format } from "@formkit/tempo"
 
 export default function GridUsuarios() {
@@ -17,6 +17,9 @@ export default function GridUsuarios() {
                 </button>
                 <button className="btn btn-xs btn-error" onClick={() => handleDelete(idUsuario)}>
                     <RiDeleteBin5Fill size={20} />
+                </button>
+                <button className="btn btn-xs btn-warning" onClick={() => openUpdatePasswordModal(idUsuario)}>
+                    <RiLockPasswordFill size={20} />
                 </button>
             </div>
         );
@@ -117,6 +120,8 @@ export default function GridUsuarios() {
     const [dataUser, setDataUser] = useState({ nombres: '', usuario: '', email: '', telefono: '' });
     const [showContent, setShowContent] = useState({ status: false, message: 'Cargando...' });
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); // Estado del modal de contraseña
+    const [selectedUserId, setSelectedUserId] = useState(null); // Estado para almacenar el ID del usuario seleccionado para actualizar la contraseña
     const onGridReady = params => {
         gridApiRef.current = params.api; // Save the grid API reference
     };
@@ -126,38 +131,40 @@ export default function GridUsuarios() {
     };
     // Manejador para cerrar el modal
     const closeCreateUserModal = () => {
-        setIsModalOpen(false); // Cerrar el modal
+        setIsModalOpen(false);
+        // Limpiar los campos del formulario
+        document.getElementById('nombresNuevousuario').value = '';
+        document.getElementById('contrasenaNuevousuario').value = '';
+        document.getElementById('usuarioNuevousuario').value = '';
+        document.getElementById('emailNuevousuario').value = '';
+        document.getElementById('telefonoNuevousuario').value = '';
     };
     const handleCreateUser = () => {
+        const nombres = document.getElementById('nombresNuevousuario').value;
+        const contrasena = document.getElementById('contrasenaNuevousuario').value;
+        const usuario = document.getElementById('usuarioNuevousuario').value;
+        const email = document.getElementById('emailNuevousuario').value;
+        const telefono = document.getElementById('telefonoNuevousuario').value;
+        if (!nombres || !contrasena || !usuario || !email || !telefono) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
         console.log('Creando nuevo usuario');
         const dataForm = {
-            nombres: document.getElementById('nombresNuevousuario').value,
-            contrasena: document.getElementById('contrasenaNuevousuario').value,  // Si tienes el campo contraseña en el formulario
-            usuario: document.getElementById('usuarioNuevousuario').value,
-            email: document.getElementById('emailNuevousuario').value,
-            telefono: document.getElementById('telefonoNuevousuario').value,
-            fecha_creacion: new Date().toISOString().split('T')[0] // Formato 'YYYY-MM-DD'
+            nombres,
+            contrasena,
+            usuario,
+            email,
+            telefono,
+            fecha_creacion: new Date().toISOString().split('T')[0]
         };
-        console.log(dataForm);
         // Enviar los datos con una solicitud POST a la API
-        axios.post('http://localhost:3001/api/v1/users/create', dataForm)
+        axios.post('http://localhost:3001/api/v1/auth/register', dataForm)
             .then((response) => {
                 if (response.data.status === true) {
                     alert('Usuario registrado correctamente');
                     closeCreateUserModal();
-                    let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
-                    axios.get(serverUrl)
-                        .then((response) => {
-                            if (response.data.status === true) {
-                                setRowData(response.data.data); // Actualizar la tabla con los nuevos datos
-                                if (gridApiRef.current) {
-                                    gridApiRef.current.refreshCells();
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    refreshGridData(); // Llamar a la función para refrescar los datos
                 } else {
                     alert('Error al registrar el usuario: ' + response.data.message);
                 }
@@ -165,6 +172,46 @@ export default function GridUsuarios() {
             .catch((error) => {
                 console.log('Error en la solicitud:', error);
                 alert('Hubo un error al intentar registrar el usuario.');
+            });
+    };
+    // Manejador para abrir el modal de actualizar contraseña
+    const openUpdatePasswordModal = (id) => {
+        setSelectedUserId(id); // Guardar el ID del usuario seleccionado
+        setIsPasswordModalOpen(true); // Abrir el modal
+    };
+
+    // Manejador para cerrar el modal
+    const closeUpdatePasswordModal = () => {
+        setIsPasswordModalOpen(false); // Cerrar el modal
+        setSelectedUserId(null); // Limpiar el ID del usuario seleccionado
+    };
+
+    // Manejador para enviar la solicitud de actualización de contraseña
+    const handleUpdatePassword = () => {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+
+        if (!currentPassword || !newPassword) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+        const dataForm = {
+            idUser: selectedUserId,
+            contrasena: currentPassword,
+            contrasenaNueva: newPassword,
+        };
+        axios.patch('http://localhost:3001/api/v1/auth/update-password', dataForm)
+            .then((response) => {
+                if (response.data.status === true) {
+                    alert('Contraseña actualizada correctamente');
+                    closeUpdatePasswordModal(); // Cerrar el modal al actualizar correctamente
+                } else {
+                    alert('Error al actualizar la contraseña: ' + response.data.error);
+                }
+            })
+            .catch((error) => {
+                console.log('Error en la solicitud:', error);
+                alert('Hubo un error al intentar actualizar la contraseña.');
             });
     };
     const editUserhandler = (id) => {
@@ -237,28 +284,7 @@ export default function GridUsuarios() {
                     alert('Usuario actualizado correctamente');
                     console.log(response.data);
                     document.getElementById('ModalEditUser').close();
-                    // Refresh the grid data
-                    let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
-                    axios.get(serverUrl)
-                        .then((response) => {
-                            if (response.data.status === true) {
-                                setRowData(response.data.data);
-                                if (gridApiRef.current) {
-                                    gridApiRef.current.refreshCells(); // Optionally refresh cells
-                                    // Alternatively, you can use setRowData to reset the data
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            switch (error.response.status) {
-                                case 500:
-                                    alert('Error al actualizar el usuario: ' + error.response.data.message);
-                                    break;
-                                case 401:
-                                    alert('Error en la autenticación actualizar el usuario: ' + error.response.data.message);
-                                    break;
-                            }
-                        });
+                    refreshGridData(); // Refrescar los datos de la grilla
                 }
             })
             .catch(error => {
@@ -272,6 +298,30 @@ export default function GridUsuarios() {
                 }
             });
     }
+    const refreshGridData = () => {
+        let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
+        axios.get(serverUrl)
+            .then((response) => {
+                if (response.data.status === true) {
+                    setRowData(response.data.data); // Actualiza los datos en la grilla
+                    if (gridApiRef.current) {
+                        gridApiRef.current.refreshCells(); // Refrescar las celdas opcionalmente
+                    }
+                } else {
+                    console.log('Error al obtener los datos: ' + response.data.message);
+                }
+            })
+            .catch((error) => {
+                switch (error.response.status) {
+                    case 500:
+                        alert('Error al obtener los datos: ' + error.response.data.message);
+                        break;
+                    case 401:
+                        alert('Error en la autenticación: ' + error.response.data.message);
+                        break;
+                }
+            });
+    };
     // parametros de la grilla
     const pagination = true;
     const paginationPageSize = 500;
@@ -361,7 +411,7 @@ export default function GridUsuarios() {
                     {isModalOpen && (
                         <dialog id="createUserModal" className="modal" open>
                             <div className="modal-box w-1/2 max-w-6xl">
-                                <h3 className="font-bold text-lg flex"><RiUserFill/> Registrar Nuevo Usuario</h3>
+                                <h3 className="font-bold text-lg flex"><RiUserFill /> Registrar Nuevo Usuario</h3>
                                 <div className="flex flex-wrap justify-evenly">
                                     <label style={{ width: '46%' }} className="form-control">
                                         <div className="label">
@@ -418,6 +468,40 @@ export default function GridUsuarios() {
                             </div>
                         </dialog>
                     )}
+                    {/* Modal para actualizar contraseña */}
+                    {isPasswordModalOpen && (
+                        <dialog id="updatePasswordModal" className="modal" open>
+                            <div className="modal-box">
+                                <h3 className="font-bold text-lg flex"><RiLockPasswordFill /> Actualizar Contraseña</h3>
+                                <div className="flex flex-wrap justify-evenly">
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Contraseña Actual</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="password" id="currentPassword" className="w-full" placeholder="Contraseña Actual" />
+                                            <RiLockPasswordFill />
+                                        </div>
+                                    </label>
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Nueva Contraseña</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="password" id="newPassword" className="w-full" placeholder="Nueva Contraseña" />
+                                            <RiLockPasswordFill />
+                                        </div>
+                                    </label>
+                                </div>
+                                <div className="modal-action">
+                                    <button className="btn btn-primary" onClick={handleUpdatePassword}>
+                                        Actualizar Contraseña
+                                    </button>
+                                    <button className="btn mx-2" onClick={closeUpdatePasswordModal}>Cerrar</button>
+                                </div>
+                            </div>
+                        </dialog>
+                    )}
                     <div className="card-body">
                         <div className="card-title flex justify-between items-center gap-2">
                             <div className="flex gap-2 items-center">
@@ -425,7 +509,7 @@ export default function GridUsuarios() {
                                 <h2>Usuarios</h2>
                             </div>
                             <button className="btn btn-primary btn-sm" onClick={openCreateUserModal}>
-                                <RiUserAddFill/> Crear Usuario
+                                <RiUserAddFill /> Crear Usuario
                             </button>
                         </div>
                         <div id="myGrid" style={{ height: "500px", width: "100%" }} className="ag-theme-quartz w-full h-500 overflow-x-auto">
