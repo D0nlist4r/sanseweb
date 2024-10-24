@@ -203,23 +203,43 @@ export default function GridUsuarios() {
                     <dialog id="ModalEditUser" className="modal">
                         <div className="modal-box w-1/2 max-w-6xl">
                             <h3 className="font-bold text-lg flex gap-2"> <RiEditBoxFill /> Editar Usuario de <span id="hddnNameUser"></span></h3>
-                            <div className="flex flex-wrap flex-row">
+                            <div className="flex flex-wrap justify-evenly">
                                 <input type="hidden" id="HdnIdUsuario" />
-                                <label style={{width:"45%"}} className="input input-bordered flex items-center gap-2 mt-6">
-                                    <input style={{overflowX:"scroll"}} type="text" id="nombres" className="grow" placeholder="Nombres" />
-                                    <RiIdCardLine />
+                                <label style={{ width: '46%' }} className="form-control">
+                                    <div className="label">
+                                        <span className="label-text">Nombres</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 input input-bordered">
+                                        <input type="text" id="nombres" className="w-full" placeholder="Nombres" />
+                                        <RiIdCardLine />
+                                    </div>
                                 </label>
-                                <label style={{width:"45%"}} className="input input-bordered flex items-center gap-2 mt-6">
-                                    <input style={{overflowX:"scroll"}} type="text" id="usuario" className="grow" placeholder="Usuario" />
-                                    <RiAtLine />
+                                <label style={{ width: '46%' }} className="form-control">
+                                    <div className="label">
+                                        <span className="label-text">Usuario</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 input input-bordered">
+                                        <input type="text" id="usuario" className="w-full" placeholder="Usuario" />
+                                        <RiAtLine />
+                                    </div>
                                 </label>
-                                <label style={{width:"45%"}} className="input input-bordered flex items-center gap-2 mt-6">
-                                    <input style={{overflowX:"scroll"}} type="text" id="email" className="grow" placeholder="Email" />
-                                    <RiMailFill />
+                                <label style={{ width: '46%' }} className="form-control">
+                                    <div className="label">
+                                        <span className="label-text">Email</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 input input-bordered">
+                                        <input type="text" id="email" className="w-full" placeholder="Email" />
+                                        <RiMailFill />
+                                    </div>
                                 </label>
-                                <label style={{width:"45%"}} className="input input-bordered flex items-center gap-2 mt-6">
-                                    <input style={{overflowX:"scroll"}} type="text" id="telefono" className="grow" placeholder="Telefono" />
-                                    <RiPhoneFill />
+                                <label style={{ width: '46%' }} className="form-control">
+                                    <div className="label">
+                                        <span className="label-text">Telefono</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 input input-bordered">
+                                        <input type="text" id="telefono" className="w-full" placeholder="Telefono" />
+                                        <RiPhoneFill />
+                                    </div>
                                 </label>
                             </div>
                             <div className="modal-action">
