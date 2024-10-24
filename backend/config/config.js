@@ -6,13 +6,7 @@ const config = {
     host: process.env.HOST,
     user: process.env.USERNAME1,
     password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    typeCast: function (field, next) {
-        if (field.type === 'NEWDECIMAL' || field.type === 'DECIMAL') {
-            return parseFloat(field.string());
-        }
-        return next();
-    }
+    database: process.env.DATABASE
 };
 
 export { config };
