@@ -4,13 +4,22 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import axios from 'axios';
 import Unauthorized from "../unauthorized/index.jsx";
 import React, { useState, useEffect, useRef } from "react";
-import { RiGroupFill, RiIdCardLine, RiEditBoxFill, RiAtLine, RiMailFill, RiPencilFill, RiCircleLine, RiPhoneFill } from '@remixicon/react';
+import { RiLockPasswordFill,RiUserFill,RiUserAddFill,RiDeleteBin5Fill, RiGroupFill, RiIdCardLine, RiEditBoxFill, RiAtLine, RiMailFill, RiPencilFill, RiCircleLine, RiPhoneFill } from '@remixicon/react';
 import { format } from "@formkit/tempo"
 
 export default function GridUsuarios() {
     const CustomButtonComponent = (props) => {
         let idUsuario = props.data.id_usuario;
-        return <button className="btn btn-xs btn-neutral" onClick={() => editUserhandler(idUsuario)}>< RiPencilFill size={20} /></button>;
+        return (
+            <div className="flex w-full h-full justify-center items-center gap-1">
+                <button className="btn btn-xs btn-neutral" onClick={() => editUserhandler(idUsuario)}>
+                    <RiPencilFill size={20} />
+                </button>
+                <button className="btn btn-xs btn-error" onClick={() => handleDelete(idUsuario)}>
+                    <RiDeleteBin5Fill size={20} />
+                </button>
+            </div>
+        );
     };
     const gridApiRef = useRef(null);
     function transformDate(params) {
@@ -23,22 +32,25 @@ export default function GridUsuarios() {
     const [rowData, setRowData] = useState([]);
     const [colDefs, setColDefs] = useState([
         {
+            cellStyle: { textAlign: 'center' },
             headerName: "cod",
             field: "id_usuario",
-            flex: 1,
+            width: 100,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             field: "nombres",
             valueFormatter: (params) => params.value.toUpperCase(),
-            flex: 2,
+            width: 300,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             field: "usuario",
-            flex: 1,
+            width: 100,
             filter: true,
             floatingFilter: true,
             editable: true,
@@ -48,60 +60,113 @@ export default function GridUsuarios() {
             },
         },
         {
+            cellStyle: { textAlign: 'center' },
             field: "email",
-            flex: 2,
+            width: 300,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             field: "telefono",
-            flex: 1
+            width: 160,
         },
         {
+            cellStyle: { textAlign: 'center' },
             headerName: "fech. creacion",
             field: "fecha_creacion",
+            width: 140,
             valueFormatter: (params) => (params.value) ? transformDate(params) : "",
-            flex: 1,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             headerName: "fech. actualización",
             field: "fecha_actualizacion",
+            width: 140,
             valueFormatter: (params) => (params.value) ? transformDate(params) : "",
-            flex: 1,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             headerName: "fech. ultimo ingreso",
             field: "ultimo_login",
+            width: 140,
             valueFormatter: (params) => (params.value) ? transformDate(params) : "",
-            flex: 1,
             filter: true,
             floatingFilter: true
         },
         {
+            cellStyle: { textAlign: 'center' },
             headerName: "activo",
             field: "activo",
-            flex: 2,
+            width: 100,
             filter: true,
             floatingFilter: true,
             cellRenderer: renderStatus,
         },
         {
+            cellStyle: { textAlign: 'center' },
             field: "acciones",
             cellRenderer: CustomButtonComponent,
-            flex: 2,
+            width: 200,
         }
     ]);
     const [dataUser, setDataUser] = useState({ nombres: '', usuario: '', email: '', telefono: '' });
     const [showContent, setShowContent] = useState({ status: false, message: 'Cargando...' });
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const onGridReady = params => {
         gridApiRef.current = params.api; // Save the grid API reference
     };
-
+    // Manejador para abrir el modal
+    const openCreateUserModal = () => {
+        setIsModalOpen(true); // Abrir el modal
+    };
+    // Manejador para cerrar el modal
+    const closeCreateUserModal = () => {
+        setIsModalOpen(false); // Cerrar el modal
+    };
+    const handleCreateUser = () => {
+        console.log('Creando nuevo usuario');
+        const dataForm = {
+            nombres: document.getElementById('nombresNuevousuario').value,
+            contrasena: document.getElementById('contrasenaNuevousuario').value,  // Si tienes el campo contraseña en el formulario
+            usuario: document.getElementById('usuarioNuevousuario').value,
+            email: document.getElementById('emailNuevousuario').value,
+            telefono: document.getElementById('telefonoNuevousuario').value,
+            fecha_creacion: new Date().toISOString().split('T')[0] // Formato 'YYYY-MM-DD'
+        };
+        console.log(dataForm);
+        // Enviar los datos con una solicitud POST a la API
+        axios.post('http://localhost:3001/api/v1/users/create', dataForm)
+            .then((response) => {
+                if (response.data.status === true) {
+                    alert('Usuario registrado correctamente');
+                    closeCreateUserModal();
+                    let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
+                    axios.get(serverUrl)
+                        .then((response) => {
+                            if (response.data.status === true) {
+                                setRowData(response.data.data); // Actualizar la tabla con los nuevos datos
+                                if (gridApiRef.current) {
+                                    gridApiRef.current.refreshCells();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                } else {
+                    alert('Error al registrar el usuario: ' + response.data.message);
+                }
+            })
+            .catch((error) => {
+                console.log('Error en la solicitud:', error);
+                alert('Hubo un error al intentar registrar el usuario.');
+            });
+    };
     const editUserhandler = (id) => {
         console.log('Editando usuario con id: ' + id);
         document.getElementById('ModalEditUser').showModal();
@@ -122,6 +187,36 @@ export default function GridUsuarios() {
             .catch(error => {
                 console.log(error);
             });
+    };
+    const handleDelete = (id) => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+            let serverUrl = `http://localhost:3001/api/v1/users/delete/${id}`;
+            axios.defaults.withCredentials = true;
+            axios.delete(serverUrl)
+                .then((response) => {
+                    if (response.data.status === true) {
+                        alert('Usuario eliminado correctamente');
+                        console.log(response.data);
+                        // Refrescar los datos de la grilla
+                        let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
+                        axios.get(serverUrl)
+                            .then((response) => {
+                                if (response.data.status === true) {
+                                    setRowData(response.data.data); // Actualizar la tabla con los nuevos datos
+                                    if (gridApiRef.current) {
+                                        gridApiRef.current.refreshCells();
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.log('Error al eliminar el usuario:', error);
+                });
+        }
     };
     const handleUpdateUser = () => {
         console.log('Actualizando usuario');
@@ -155,20 +250,32 @@ export default function GridUsuarios() {
                             }
                         })
                         .catch(error => {
-                            console.log(error);
+                            switch (error.response.status) {
+                                case 500:
+                                    alert('Error al actualizar el usuario: ' + error.response.data.message);
+                                    break;
+                                case 401:
+                                    alert('Error en la autenticación actualizar el usuario: ' + error.response.data.message);
+                                    break;
+                            }
                         });
                 }
             })
             .catch(error => {
-                console.log(error);
+                switch (error.response.status) {
+                    case 500:
+                        alert('Error al actualizar el usuario: ' + error.response.data.message);
+                        break;
+                    case 401:
+                        alert('Error en la autenticación actualizar el usuario: ' + error.response.data.message);
+                        break;
+                }
             });
     }
-
     // parametros de la grilla
     const pagination = true;
     const paginationPageSize = 500;
     const paginationPageSizeSelector = [200, 500, 1000];
-
     // carga de datos
     useEffect(() => {
         let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
@@ -192,7 +299,6 @@ export default function GridUsuarios() {
                 }
             });
     }, []);
-
     if (!showContent.status) {
         return <Unauthorized />;
     } else {
@@ -251,9 +357,78 @@ export default function GridUsuarios() {
                             </div>
                         </div>
                     </dialog>
+                    {/* Modal para crear un nuevo usuario */}
+                    {isModalOpen && (
+                        <dialog id="createUserModal" className="modal" open>
+                            <div className="modal-box w-1/2 max-w-6xl">
+                                <h3 className="font-bold text-lg flex"><RiUserFill/> Registrar Nuevo Usuario</h3>
+                                <div className="flex flex-wrap justify-evenly">
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Nombres</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="text" id="nombresNuevousuario" className="w-full" placeholder="Nombres" />
+                                            <RiIdCardLine />
+                                        </div>
+                                    </label>
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Usuario</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="text" id="usuarioNuevousuario" className="w-full" placeholder="Usuario" />
+                                            <RiAtLine />
+                                        </div>
+                                    </label>
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Email</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="email" id="emailNuevousuario" className="w-full" placeholder="Email" />
+                                            <RiMailFill />
+                                        </div>
+                                    </label>
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Teléfono</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="tel" id="telefonoNuevousuario" className="w-full" placeholder="Teléfono" />
+                                            <RiPhoneFill />
+                                        </div>
+                                    </label>
+                                    <label style={{ width: '46%' }} className="form-control">
+                                        <div className="label">
+                                            <span className="label-text">Contraseña</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 input input-bordered">
+                                            <input type="password" id="contrasenaNuevousuario" className="w-full" placeholder="Contraseña" />
+                                            <RiLockPasswordFill />
+                                        </div>
+                                    </label>
+                                </div>
+                                <div className="modal-action">
+                                    <button className="btn btn-primary" onClick={handleCreateUser}>
+                                        Registrar
+                                    </button>
+                                    <button className="btn mx-2" onClick={closeCreateUserModal}>Cerrar</button>
+                                </div>
+                            </div>
+                        </dialog>
+                    )}
                     <div className="card-body">
-                        <h2 className="card-title flex gap-2"><RiGroupFill /> Usuarios</h2>
-                        <div id="myGrid" style={{ height: "500px", width: "100%" }} className="ag-theme-quartz">
+                        <div className="card-title flex justify-between items-center gap-2">
+                            <div className="flex gap-2 items-center">
+                                <RiGroupFill />
+                                <h2>Usuarios</h2>
+                            </div>
+                            <button className="btn btn-primary btn-sm" onClick={openCreateUserModal}>
+                                <RiUserAddFill/> Crear Usuario
+                            </button>
+                        </div>
+                        <div id="myGrid" style={{ height: "500px", width: "100%" }} className="ag-theme-quartz w-full h-500 overflow-x-auto">
                             <AgGridReact
                                 rowData={rowData}
                                 columnDefs={colDefs}
