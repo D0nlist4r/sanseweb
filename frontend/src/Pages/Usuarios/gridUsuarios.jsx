@@ -117,7 +117,6 @@ export default function GridUsuarios() {
             width: 200,
         }
     ]);
-    const [dataUser, setDataUser] = useState({ nombres: '', usuario: '', email: '', telefono: '' });
     const [showContent, setShowContent] = useState({ status: false, message: 'Cargando...' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); // Estado del modal de contraseña
