@@ -9,6 +9,9 @@ export function NavPage() {
     const Location = useLocation();
       function homeOn(){
         if (Location.pathname == '/Home'){
+            return 
+        }
+        if (Location.pathname == '/gestion-usuarios'){
             return <div></div>
         }
         else{ 
@@ -48,6 +51,7 @@ export function NavPage() {
      </a>
         }
     }
+
   
     return (<>
         {homeOn()}

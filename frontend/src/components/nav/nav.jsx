@@ -1,5 +1,5 @@
 import React from 'react';
-import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine, RiGroupFill } from "@remixicon/react";
+import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine, RiGroupFill, RiInboxArchiveLine } from "@remixicon/react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -78,6 +78,12 @@ export default function MainNav(props) {
                                 <a >
                                     <RiToolsFill />
                                     Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <RiInboxArchiveLine/>
+                                    Solicitudes
                                 </a>
                             </li>
                             <li>
