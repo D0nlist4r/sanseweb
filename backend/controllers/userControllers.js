@@ -32,7 +32,6 @@ const updateUser = async (req, res, next) => {
         // se recibe el id_usuario por medio del body
         const body = req.body;
         const idUser = req.body.idUser;
-        console.log(idUser);
         let response = await user.update(idUser, body.nombres, body.usuario, body.email, body.telefono, body.fecha_actualizacion);
         if (response.status) {
             res.status(200).json(response);
@@ -62,7 +61,6 @@ const deleteUser = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
     try {
         let response = await user.getUsers();
-        console.log(response);
         if (response.status) {
             res.status(200).json(response);
         } else {

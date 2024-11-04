@@ -56,8 +56,6 @@ class UserService {
                 if (err) {
                     reject(boom.badRequest('Error en la actualización del usuario', err));
                 } else {
-                    console.log(id_usuario);
-                    console.log(result);
                     resolve({
                         status: true,
                         message: 'Usuario actualizado correctamente',

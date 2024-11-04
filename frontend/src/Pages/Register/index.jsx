@@ -7,10 +7,6 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar los datos de registro
-    console.log('Nombre:', name);
-    console.log('Email:', email);
-    console.log('Contraseña:', password);
     // Resetea los campos después del envío
     setName('');
     setEmail('');

@@ -242,7 +242,6 @@ export default function GridUsuarios() {
                 .then((response) => {
                     if (response.data.status === true) {
                         alert('Usuario eliminado correctamente');
-                        console.log(response.data);
                         // Refrescar los datos de la grilla
                         let serverUrl = 'http://localhost:3001/api/v1/users/get-info-users';
                         axios.get(serverUrl)
@@ -265,7 +264,6 @@ export default function GridUsuarios() {
         }
     };
     const handleUpdateUser = () => {
-        console.log('Actualizando usuario');
         let serverUrl = 'http://localhost:3001/api/v1/users/update';
         let dataForm = {
             idUser: document.getElementById('HdnIdUsuario').value,
@@ -281,7 +279,6 @@ export default function GridUsuarios() {
             .then((response) => {
                 if (response.data.status === true) {
                     alert('Usuario actualizado correctamente');
-                    console.log(response.data);
                     document.getElementById('ModalEditUser').close();
                     refreshGridData(); // Refrescar los datos de la grilla
                 }

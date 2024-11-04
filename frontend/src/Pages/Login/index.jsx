@@ -24,7 +24,6 @@ const Login = () => {
       contrasena: password
     })
       .then((response) => {
-        console.log(response);
         if (response.data.status === true) {
           navigate("/Home");
         }

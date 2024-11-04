@@ -1,13 +1,15 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import verifyToken from "../../controllers/Auth/index";
 import MainNav from "../../components/nav/nav";
 import ContentDashboard from "./ContentDashboard";
-import Footer from "../../components/footer/footer";
+import SolicitudesModal from "../../components/solicitudesModal"; // Importa el nuevo componente
 
 function Home() {
   const [response, setResponse] = useState(null);
   const navigate = useNavigate(); // Hook useNavigate dentro del componente
+  const [isSolicitudesModalOpen, setIsSolicitudesModalOpen] = useState(false);
+
 
   useEffect(() => {
     async function checkToken() {
@@ -18,6 +20,14 @@ function Home() {
     checkToken();
   }, [navigate]);
 
+  const openSolicitudesModal = () => {
+    setIsSolicitudesModalOpen(true);
+  };
+
+  const closeSolicitudesModal = () => {
+    setIsSolicitudesModalOpen(false);
+  };
+
   if (!response) {
     return <p>Cargando...</p>; // Muestra un mensaje de carga mientras se verifica el token
   }
@@ -25,8 +35,11 @@ function Home() {
   if (response.status === true) {
     return (
       <>
-        <MainNav userId={response.user.userId} />
-        <ContentDashboard name={response.user.userName} />
+        <MainNav userId={response.user.userId} onSolicitudesClick={openSolicitudesModal}  esAdmin={response.user.esAdmin} />
+        <ContentDashboard name={response.user.userName} userId={response.user.userId} />
+        {isSolicitudesModalOpen && (
+          <SolicitudesModal userId={response.user.userId} onClose={closeSolicitudesModal} />
+        )}
       </>
     );
   } else {
