@@ -49,8 +49,15 @@ const getNovedadesByUser = async (req, res, next) => {
 const markNovedadAsRead = async (req, res, next) => {
     try {
         const { id_novedad } = req.params;
-        const updateData = { leida: 1 }; // Marcar como leída
-        const searchData = { id_novedad: id_novedad };
+        let updateData = { leida: 1 }; // Marcar como leída
+        let searchData;
+        if(id_novedad == 0){ // todas las novedades pendientes
+            searchData = { leida: 0 };
+        }else{
+            searchData = { id_novedad: id_novedad };
+        }
+        console.log('searchData:', searchData);
+        console.log('updateData:', updateData);
         let response = await novedadesService.updateByCriterio(searchData, updateData);
         res.status(200).json(response);
     } catch (error) {

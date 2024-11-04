@@ -37,6 +37,7 @@ export default function NotificationsDropdown({ userId, setUnreadNovedadesCount 
     }, [offset]);
 
     const markAsRead = async (idNovedad) => {
+        console.log('Marking as read:', idNovedad);
         try {
             await axios.patch(
                 `http://localhost:3001/api/v1/novedades/${idNovedad}/read`,
@@ -67,14 +68,14 @@ export default function NotificationsDropdown({ userId, setUnreadNovedadesCount 
         <div className="w-full">
             <div className="flex justify-between items-center mb-2">
                 <h3 className="text-lg font-bold">Notificaciones</h3>
-                <button className="btn btn-xs btn-outline" onClick={markAsRead}><RiCheckDoubleFill /> Marcar todas</button>
+                <button className="btn btn-xs btn-outline" onClick={() => markAsRead(0)}><RiCheckDoubleFill /> Marcar todas</button>
             </div>
             <ul className="menu bg-base-100 w-full">
                 {novedades.length > 0 ? (
                     novedades.map((novedad) => (
                         <li
                             key={novedad.id_novedad}
-                             className={`flex justify-between items-start border-b p-2 ${novedad.leida === 1 ? 'opacity-50' : 'bg-white'} rounded-lg shadow-sm mb-2`}
+                            className={`flex justify-between items-start border-b p-2 ${novedad.leida === 1 ? 'opacity-50' : 'bg-white'} rounded-lg shadow-sm mb-2`}
                         >
                             <div className="w-full flex items-start">
                                 <RiNotificationLine className={`mr-2 ${novedad.leida === 0 ? 'text-green-500' : 'text-gray-500'}`} />
