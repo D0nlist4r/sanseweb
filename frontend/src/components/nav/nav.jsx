@@ -4,11 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine, RiGroupFill, RiInboxArchiveLine } from "@remixicon/react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSolicitudesCount } from '../../store/actions/solicitudesActions';
 
 export default function MainNav(props) {
     const { userId, esAdmin, onSolicitudesClick } = props;
     const navigate = useNavigate();
-    const [solicitudesCount, setSolicitudesCount] = useState(0);
+    const solicitudesCount = useSelector(state => state.solicitudes.solicitudesCount);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (esAdmin) {
@@ -16,14 +19,14 @@ export default function MainNav(props) {
             axios.get('http://localhost:3001/api/v1/solicitudes/count', { withCredentials: true })
                 .then(response => {
                     if (response.data.status) {
-                        setSolicitudesCount(response.data.data[0].count);
+                        dispatch(setSolicitudesCount(response.data.count)); // Usa la acción de Redux
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching solicitudes count:', error);
                 });
         }
-    }, [esAdmin]);
+    }, [esAdmin, dispatch]);
 
     function handleNavigation(route) {
         navigate(route);

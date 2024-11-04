@@ -9,10 +9,13 @@ import {
     RiCheckboxCircleLine,
     RiCloseCircleLine
 } from "@remixicon/react";
+import { useDispatch } from 'react-redux';
+import { decrementSolicitudesCount } from '../store/actions/solicitudesActions';
 
 export default function SolicitudesModal({ userId, onClose }) {
     const [solicitudes, setSolicitudes] = useState([]);
     const [selectedSolicitudes, setSelectedSolicitudes] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetchSolicitudes();
@@ -24,7 +27,6 @@ export default function SolicitudesModal({ userId, onClose }) {
             axios.defaults.withCredentials = true;
             const response = await axios.get(serverUrl);
             if (response.data.status === true) {
-                // No filtrar por usuario si deseas ver todas las solicitudes
                 const userSolicitudes = response.data.data.filter(solicitud => solicitud.gestionada === 0);
                 setSolicitudes(userSolicitudes);
             } else {
@@ -36,15 +38,8 @@ export default function SolicitudesModal({ userId, onClose }) {
         }
     };
 
-    const handleCheckboxChange = (e, id_solicitud) => {
-        if (e.target.checked) {
-            setSelectedSolicitudes([...selectedSolicitudes, id_solicitud]);
-        } else {
-            setSelectedSolicitudes(selectedSolicitudes.filter(id => id !== id_solicitud));
-        }
-    };
     const handleAccept = async () => {
-        if(selectedSolicitudes.length === 0) {
+        if (selectedSolicitudes.length === 0) {
             alert('Selecciona al menos una solicitud.');
             return;
         }
@@ -56,13 +51,16 @@ export default function SolicitudesModal({ userId, onClose }) {
             fetchSolicitudes();
             setSelectedSolicitudes([]);
             alert('Solicitudes aceptadas correctamente.');
+            // Disminuir el contador en Redux
+            dispatch(decrementSolicitudesCount(selectedSolicitudes.length));
         } catch (error) {
             console.error(error);
             alert('Error al aceptar las solicitudes.');
         }
     };
+
     const handleReject = async () => {
-        if(selectedSolicitudes.length === 0) {
+        if (selectedSolicitudes.length === 0) {
             alert('Selecciona al menos una solicitud.');
             return;
         }
@@ -74,9 +72,18 @@ export default function SolicitudesModal({ userId, onClose }) {
             fetchSolicitudes();
             setSelectedSolicitudes([]);
             alert('Solicitudes rechazadas correctamente.');
+            // Disminuir el contador en Redux
+            dispatch(decrementSolicitudesCount(selectedSolicitudes.length));
         } catch (error) {
             console.error(error);
             alert('Error al rechazar las solicitudes.');
+        }
+    };
+    const handleCheckboxChange = (e, id_solicitud) => {
+        if (e.target.checked) {
+            setSelectedSolicitudes([...selectedSolicitudes, id_solicitud]);
+        } else {
+            setSelectedSolicitudes(selectedSolicitudes.filter(id => id !== id_solicitud));
         }
     };
 

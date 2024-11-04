@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { incrementSolicitudesCount } from '../../store/actions/solicitudesActions';
 
 export default function ContentDashboard(props) {
+    const dispatch = useDispatch();
     const handleCreateSolicitud = async (idServicio) => {
         try {
             const response = await axios.post('http://localhost:3001/api/v1/solicitudes/', {
@@ -10,12 +13,15 @@ export default function ContentDashboard(props) {
             });
             if (response.data.status) {
                 alert('Solicitud creada correctamente.');
+
+                // Incrementar el contador de solicitudes en el estado global
+                dispatch(incrementSolicitudesCount(1));
             } else {
                 alert('No se pudo crear la solicitud: ' + response.data.message);
             }
         } catch (error) {
             console.error(error);
-            alert('Error al crear la solicitud: ' + error.response.data.message);
+            alert('Error al crear la solicitud: ' + (error.response?.data?.message || error.message));
         }
     };
     return (

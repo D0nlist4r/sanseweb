@@ -51,8 +51,11 @@ const getSolicitudById = async (req, res, next) => {
 
 const getPendingSolicitudesCount = async (req, res, next) => {
     try {
-        let responseCount = await solicitudService.findInTable(['COUNT(*) AS count'], { gestionada: 0, visible: 1 });
-        res.status(200).json(responseCount);
+        let response = await solicitudService.findInTable(['COUNT(*) AS count'], { gestionada: 0, visible: 1 });
+        res.status(200).json({
+            status: true,
+            count: response.data[0].count,
+        });
     } catch (error) {
         next(error);
     }
