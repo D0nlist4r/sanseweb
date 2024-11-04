@@ -2,9 +2,11 @@
 import SolicitudService from '../services/solicitudes.services.js';
 import UsersService from '../services/users.services.js';
 import ServiciosService from '../services/servicios.services.js';
+import NovedadesService from '../services/novedades.services.js';
 const solicitudService = new SolicitudService();
 const usersService = new UsersService();
 const serviciosService = new ServiciosService();
+const novedadesService = new NovedadesService();
 
 const createSolicitud = async (req, res, next) => {
     try {
@@ -94,6 +96,31 @@ const updateMultipleSolicitudes = async (req, res, next) => {
         };
         ids = { id_solicitud: ids };
         let responseActualizacion = await solicitudService.updateByCriterio(ids, updateData);
+        if (gestionada === 2 || gestionada === 1) {
+            for (const id of ids.id_solicitud) {
+                // Obtener información de la solicitud actualizada
+                const solicitud = await solicitudService.getById(id);
+                const idUsuario = solicitud.data.id_usuario;
+                const idServicio = solicitud.data.id_servicio;
+                let servicioSolicitado = await serviciosService.getById(idServicio);
+                const servicioNombre = servicioSolicitado.data.nom; // Asegúrate de que este campo esté disponible
+                // Crear una novedad para el usuario
+                let novedadDescripcion;
+                if (gestionada === 2) {
+                    novedadDescripcion = `Su solicitud para el servicio ${servicioNombre} ha sido aceptada. Gracias por usar nuestro sistema.`;
+                } else if (gestionada === 1) {
+                    novedadDescripcion = `Su solicitud para el servicio ${servicioNombre} ha sido rechazada.`;
+                }
+                if (novedadDescripcion) {
+                    await novedadesService.insertInTable({
+                        fecha_novedad: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                        novedad: novedadDescripcion,
+                        id_usuario: idUsuario,
+                        leida: 0
+                    });
+                }
+            }
+        }
         res.status(200).json(responseActualizacion);
     } catch (error) {
         next(error);

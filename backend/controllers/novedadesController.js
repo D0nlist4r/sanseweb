@@ -11,7 +11,7 @@ const novedadesService = new NovedadesService();
 const getNovedadesByUser = async (req, res, next) => {
     try {
         const id_usuario = req.params.id_usuario;
-        const userIdFromToken = req.session.user.id_usuario; // Asumiendo que guardas el id_usuario en la sesión
+        const userIdFromToken = req.session.user.userId; // Asumiendo que guardas el id_usuario en la sesión
         if (id_usuario !== userIdFromToken) {
             return res.status(403).json({ status: false, message: 'Acceso no autorizado' });
         }

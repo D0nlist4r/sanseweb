@@ -18,12 +18,15 @@ class NovedadesService {
         return new Promise((resolve, reject) => {
             // Validar y construir los campos seleccionados
             const allowedFields = ['id_novedad', 'fecha_novedad', 'novedad', 'id_usuario', 'leida'];
-            const fields = selectFields.filter(field => allowedFields.includes(field)).join(', ');
-
-            if (!fields) {
-                return reject(boom.badRequest('Campos de selección inválidos'));
+            let fields = '';
+            if (selectFields.includes('*')) {
+                fields = '*';
+            } else {
+                fields = selectFields.filter(field => allowedFields.includes(field)).join(', ');
+                if (!fields) {
+                    return reject(boom.badRequest('Campos de selección inválidos'));
+                }
             }
-
             // Construir la cláusula WHERE
             let whereClause = '';
             let values = [];

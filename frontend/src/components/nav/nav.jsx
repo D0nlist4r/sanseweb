@@ -1,17 +1,17 @@
-// components/nav/nav.js
-
 import React, { useState, useEffect } from 'react';
 import { RiMenu2Fill, RiHome2Fill, RiNotification3Fill, RiToolsFill, RiUser2Fill, RiLogoutBoxLine, RiGroupFill, RiInboxArchiveLine } from "@remixicon/react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSolicitudesCount } from '../../store/actions/solicitudesActions';
+import NotificationsDropdown from './NotificationsDropdown';
 
 export default function MainNav(props) {
     const { userId, esAdmin, onSolicitudesClick } = props;
     const navigate = useNavigate();
     const solicitudesCount = useSelector(state => state.solicitudes.solicitudesCount);
     const dispatch = useDispatch();
+    const [unreadNovedadesCount, setUnreadNovedadesCount] = useState(0);
 
     useEffect(() => {
         if (esAdmin) {
@@ -75,12 +75,29 @@ export default function MainNav(props) {
                     <a className="btn btn-ghost text-xl">Sanse Finance</a>
                 </div>
                 <div className="flex-none navbar-end">
-                    <button className="btn btn-ghost btn-circle">
-                        <div className="indicator">
-                            <RiNotification3Fill />
-                            <span className="badge badge-xs badge-primary indicator-item"></span>
+                    <div className="dropdown dropdown-bottom dropdown-end">
+                        <div
+                            tabIndex={0}
+                            role="button"
+                            className="btn btn-ghost btn-circle"
+                        >
+                            <div className="indicator">
+                                <RiNotification3Fill />
+                                {unreadNovedadesCount > 0 && (
+                                    <span className="badge badge-xs badge-primary indicator-item"></span>
+                                )}
+                            </div>
                         </div>
-                    </button>
+                        <div
+                            tabIndex={0}
+                            className="dropdown-content bg-base-100 rounded-box w-80 p-4 shadow z-[1] max-h-96 overflow-y-auto"
+                        >
+                            <NotificationsDropdown
+                                userId={userId}
+                                setUnreadNovedadesCount={setUnreadNovedadesCount}
+                            />
+                        </div>
+                    </div>
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="mask mask-hexagon w-24">
