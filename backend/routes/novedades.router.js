@@ -4,7 +4,7 @@ const router = express.Router();
 import authHandler from '../middleware/auth.handler.js';
 import validatorHandler from '../middleware/validator.handler.js';
 import { getNovedadesByUser, markNovedadAsRead } from '../controllers/novedadesController.js';
-import { getNovedadesByUserSchema, markNovedadAsReadSchema } from '../schemas/novedades.schema.js';
+import { getNovedadesByUserSchema, markNovedadAsReadSchema,getNovedadesByUserQuerySchema } from '../schemas/novedades.schema.js';
 
 router.get(
     '/user/:id_usuario',
