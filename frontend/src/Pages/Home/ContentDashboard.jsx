@@ -2,8 +2,13 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { incrementSolicitudesCount } from '../../store/actions/solicitudesActions';
+import {SectionAhorroMainDashboard} from './SectionAhorroMainDashboard';
+import {SectionP2pMainDashboard} from './SectionP2pMainDashboard';
+import {SectionPrestamosMainDashboard} from './SectionPrestamosMainDashboard';
 
 export default function ContentDashboard(props) {
+    console.log(userId)
+    let userId = props.userId;
     const dispatch = useDispatch();
     const handleCreateSolicitud = async (idServicio) => {
         try {
@@ -25,33 +30,36 @@ export default function ContentDashboard(props) {
         }
     };
     return (
+        /* añadir un padding al tablist */
         <div className="hero bg-base-200 py-14">
-            <div className="hero-content text-center">
-                <div className="max-w-md">
+            <div role="tablist" className="tabs tabs-lifted w-full p-4">
+                <input
+                    type="radio"
+                    name="my_tabs_2"
+                    role="tab"
+                    className="tab"
+                    aria-label="AHORRO"
+                    defaultChecked
+                    />
+                <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                    <SectionAhorroMainDashboard 
+                    userId={userId} 
+                    />
+                </div>
+                <input
+                    type="radio"
+                    name="my_tabs_2"
+                    role="tab"
+                    className="tab"
+                    aria-label="PRESTAMOS"
+                     />
+                <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                    <SectionPrestamosMainDashboard />
+                </div>
 
-                    <h1 className="text-5xl font-bold">Bienvenido, {props.name} </h1>
-                    <p className="py-6">
-                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-                        quasi. In deleniti eaque aut repudiandae et a id nisi.
-                    </p>
-                    <button
-                        className="btn btn-primary mx-2 my-2"
-                        onClick={() => handleCreateSolicitud(2)}
-                    >
-                        EMPEZAR AHORRO
-                    </button>
-                    <button
-                        className="btn btn-secondary mx-2 my-2"
-                        onClick={() => handleCreateSolicitud(3)}
-                    >
-                        SOLICITAR PRÉSTAMO
-                    </button>
-                    <button
-                        className="btn btn-success mx-2 my-2"
-                        onClick={() => handleCreateSolicitud(1)}
-                    >
-                        SERVICIO P2P
-                    </button>
+                <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="P2P" />
+                <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                    <SectionP2pMainDashboard />
                 </div>
             </div>
         </div>

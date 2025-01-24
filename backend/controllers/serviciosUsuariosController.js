@@ -64,4 +64,15 @@ const getServiciosUsuarios = async (req, res, next) => {
     }
 }
 
-export { createServicioUsuario, getServicioUsuarioById, updateServicioUsuario, deleteServicioUsuario, getServiciosUsuarios };
+
+const obtenerServiciosPorUsuario = async (req, res, next) => {
+    try {
+        const { id_usuario } = req.params;
+        let response = await servicioUsuarioService.getServiciosPorUsuario(id_usuario);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { createServicioUsuario, getServicioUsuarioById, updateServicioUsuario, deleteServicioUsuario, getServiciosUsuarios, obtenerServiciosPorUsuario };

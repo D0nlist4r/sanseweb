@@ -4,8 +4,8 @@ const router = express.Router();
 import validatorHandler from '../middleware/validator.handler.js';
 import authHandler from '../middleware/auth.handler.js';
 import validatePermissionsUser from '../middleware/permissions.handler.js';
-import { createServicioUsuarioSchema, updateServicioUsuarioSchema, getServicioUsuarioSchema } from '../schemas/serviciosUsuarios.schema.js';
-import { createServicioUsuario, getServicioUsuarioById, updateServicioUsuario, deleteServicioUsuario, getServiciosUsuarios } from '../controllers/serviciosUsuariosController.js';
+import { createServicioUsuarioSchema, obtenerServiciosPorUsuarioSchema, updateServicioUsuarioSchema, getServicioUsuarioSchema } from '../schemas/serviciosUsuarios.schema.js';
+import { createServicioUsuario,obtenerServiciosPorUsuario, getServicioUsuarioById, updateServicioUsuario, deleteServicioUsuario, getServiciosUsuarios } from '../controllers/serviciosUsuariosController.js';
 
 router.get(
     '/',
@@ -42,5 +42,15 @@ router.delete(
     validatorHandler(getServicioUsuarioSchema, 'params'),
     deleteServicioUsuario
 );
+
+
+
+router.get(
+    '/obtener-servicios-por-usuario/:id_usuario',
+    authHandler,
+    validatorHandler(obtenerServiciosPorUsuarioSchema, 'params'),
+    obtenerServiciosPorUsuario
+);
+
 
 export default router;

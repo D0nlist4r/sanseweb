@@ -18,4 +18,9 @@ const getServicioUsuarioSchema = Joi.object({
     cod_registro: Joi.number().integer().required(),
 });
 
-export { createServicioUsuarioSchema, updateServicioUsuarioSchema, getServicioUsuarioSchema };
+
+const obtenerServiciosPorUsuarioSchema = Joi.object({
+    id_usuario: Joi.string().required(),
+});
+
+export { createServicioUsuarioSchema, updateServicioUsuarioSchema, getServicioUsuarioSchema, obtenerServiciosPorUsuarioSchema };

@@ -98,6 +98,8 @@ export default function MainNav(props) {
                             />
                         </div>
                     </div>
+                    {/* agregar un texto de bienvenida */}
+                    <div className="text-lg">Bienvenido, {props.name}</div>
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="mask mask-hexagon w-24">

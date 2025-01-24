@@ -100,6 +100,26 @@ class ServicioUsuarioService {
             });
         });
     }
+
+
+
+    getServiciosPorUsuario(idUsuario){
+        return new Promise((resolve, reject) => {
+            const query = `SELECT * FROM servicios_usuarios WHERE id_usuario = ?`;
+            const values = [idUsuario];
+            connection.query(query, values, (err, result) => {
+                if (err) {
+                    reject(boom.badRequest('Error obteniendo servicios_usuarios', err));
+                } else {
+                    resolve({
+                        status: true,
+                        message: 'ServiciosUsuarios obtenidos correctamente',
+                        data: result
+                    });
+                }
+            });
+        });
+    }
 }
 
 export default ServicioUsuarioService;

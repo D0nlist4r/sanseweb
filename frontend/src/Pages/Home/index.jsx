@@ -35,7 +35,7 @@ function Home() {
   if (response.status === true) {
     return (
       <>
-        <MainNav userId={response.user.userId} onSolicitudesClick={openSolicitudesModal}  esAdmin={response.user.esAdmin} />
+        <MainNav userId={response.user.userId} name={response.user.userName} onSolicitudesClick={openSolicitudesModal}  esAdmin={response.user.esAdmin} />
         <ContentDashboard name={response.user.userName} userId={response.user.userId} />
         {isSolicitudesModalOpen && (
           <SolicitudesModal userId={response.user.userId} onClose={closeSolicitudesModal} />
